@@ -1,0 +1,37 @@
+# Maven target folder
+/target/
+
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/out/
+
+# Eclipse
+/.classpath
+/.project
+/.settings/
+
+# VS Code
+/.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Spring Boot DevTools restart files
+.restart/
+
+# Maven wrapper files
+/.mvn/wrapper/maven-wrapper.jar
+
+# Package distribution
+*.jar
+*.war
+*.ear
+
+# Temporary files
+*.tmp
+*.bak
