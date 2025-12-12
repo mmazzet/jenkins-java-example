@@ -22,4 +22,12 @@ public class VersionController {
     map.put("buildTimestamp", buildTimestamp);
     return map;
   }
+
+  void setVersion(String version) {
+    this.version = version;
+  }
+
+  void setBuildTimestamp(String buildTimestamp) {
+    this.buildTimestamp = buildTimestamp;
+  }
 }
