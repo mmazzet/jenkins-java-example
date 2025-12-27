@@ -1,36 +1,37 @@
-def gv
-pipeline {
-    agent any
-    tools {
-        maven 'maven-3.6'
-    }
 
+pipeline {
+    agent none
     stages {
-        stage("init") {
+        stage("test") {
             steps {
                 script {
-                    gv = load "script.groovy"
+                    echo "testing the app"
+                    echo "executing the pipeline for branch $BRANCH_NAME"
                 }
             }
         }
-        stage('Build jar') {
-            steps {
-                script {
-                    gv.buildJar()
+        stage('build') {
+            when {
+                expression {
+                    BRANCH_NAME == 'mainline'
                 }
             }
-        }
-        stage('Build image') {
             steps {
                 script {
-                    gv.buildImage()
+                    echo "building the app"
                 }
             }
         }
         stage('deploy') {
+
+            when {
+                expression {
+                    BRANCH_NAME == 'mainline'
+                }
+            }
             steps {
                 script {
-                    gv.deployApp()
+                    echo "deploying the app"
                 }
             }
         }
