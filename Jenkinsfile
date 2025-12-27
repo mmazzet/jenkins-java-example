@@ -1,46 +1,34 @@
-def gv
+
 pipeline {
     agent any
-
-    parameters {
-        choice(name: 'VERSION', choices: ['1.1.1', '2.2.2', '3.3.3'], description: '')
-        booleanParam(name: 'executeTests', defaultValue: true, description: '')
+    tools {
+        maven 'maven-3.6'
     }
-
-
     stages {
-        stage('init') {
+        stage('Build jar') {
             steps {
                 script {
-                    gv = load "script.groovy"
+                    echo "Building App..."
+                    sh 'mvn package'
                 }
             }
         }
-        stage('Build') {
-            steps {
-                script {
-                    gv.buildApp()
+            stage('Build image') {
+                steps {
+                    script {
+                        echo "Building DOCKER image..."
+                        withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            sh 'docker build -t objectobjectlady/jenkins-java-example:jje-2.0 .'
+                            sh "echo $PASS | docker login -u $USER --password-stdin"
+                            sh 'docker push objectobjectlady/jenkins-java-example:jje-2.0'
+                        }
+                    }
                 }
             }
-        }
-        stage('Test') {
-            when {
-                expression {
-                    params.executeTests
-                }
-            }
+        stage('deploy') {
             steps {
                 script {
-                    gv.testApp()
-                }
-            }
-        }
-        stage('Deploy') {
-            steps {
-                script {
-                    env.ENV = input message: "Select the deployment environment", ok: "Confirm", parameters: [choice(name: 'ENVIRONMENTONE', choices: ['development', 'staging', 'production', 'teapot'], description: 'Test description env-one')]
-                    gv.deployApp()
-                    echo "Deploying to ${ENV}"
+                    echo "Deploying App..."
                 }
             }
         }
