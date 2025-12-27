@@ -1,14 +1,20 @@
-def buildApp() {
-    echo 'Building the application'
+def buildJar() {
+    echo "Building App..."
+    sh 'mvn package'
 }
 
-def testApp() {
-    echo 'Testing the application'
+def buildImage() {
+    echo "Building DOCKER image..."
+    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+        sh 'docker build -t objectobjectlady/jenkins-java-example:jje-2.0 .'
+        sh "echo $PASS | docker login -u $USER --password-stdin"
+        sh 'docker push objectobjectlady/jenkins-java-example:jje-2.0'
+    }
 }
 
 def deployApp() {
-    echo 'Deploying the application'
-    echo "Deploying version ${params.VERSION}"
+    echo "Deploying App..."
+
 }
 
 return this
