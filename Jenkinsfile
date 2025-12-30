@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-library identifier: 'jenkins-shared-lib@master', retriever: modernSCM(
+library identifier: 'jenkins-shared-lib@mainline', retriever: modernSCM(
     [$class: 'GitSCMSource',
     remote: 'https://github.com/mmazzet/jenkins-shared-lib.git',
     credentialsId: 'github-token'
