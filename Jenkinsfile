@@ -1,5 +1,10 @@
 #!/usr/bin/env groovy
-@Library('jenkins-shared-lib')
+library identifier: 'jenkins-shared-lib@master', retriever: modernSCM(
+    [$class: 'GitSCMSource',
+    remote: 'https://github.com/mmazzet/jenkins-shared-lib.git',
+    credentialsId: 'github-token'
+    ]
+)
 
 def gv
 
