@@ -23,10 +23,12 @@ pipeline {
                 }
             }
         }
-        stage('BUILD IMAGE') {
+        stage('BUILD AND PUSH IMAGE') {
             steps {
                 script {
-                    buildImage 'objectobjectlady/jenkins-java-example:jje-3.7'
+                    buildImage 'objectobjectlady/jenkins-java-example:jje-3.9'
+                    dockerLogin()
+                    dockerPush 'objectobjectlady/jenkins-java-example:jje-3.9'
                 }
             }
         }
