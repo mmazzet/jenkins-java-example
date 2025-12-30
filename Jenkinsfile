@@ -26,7 +26,7 @@ pipeline {
         stage('BUILD IMAGE') {
             steps {
                 script {
-                    buildImage 'objectobjectlady/jenkins-java-example:jje-3.0'
+                    buildImage 'objectobjectlady/jenkins-java-example:jje-3.5'
                 }
             }
         }
