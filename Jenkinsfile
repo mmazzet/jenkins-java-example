@@ -7,7 +7,7 @@ pipeline {
                 script {
                     echo "testing the app"
                     echo "executing the pipeline for branch $BRANCH_NAME"
-                    echo "Testing autobuild in jenkins 2"
+                    echo "Testing multibranch autobuild"
                 }
             }
         }
