@@ -45,22 +45,5 @@ pipeline {
                 }
             }
         }
-        stage('Commit Version Update'){
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'git config --global user.email "jenkins@example.com"'
-                        sh 'git config --global user.name "jenkins"'
-                        sh 'git status'
-                        sh 'git branch'
-                        sh 'git config --list'
-                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/mmazzet/jenkins-java-example.git"
-                        sh 'git add .'
-                        sh 'git commit -m "ci:version increment"'
-                        sh 'git push origin HEAD:test-jenkins-script'
-                    }
-                }
-            }
-        }
     }
 }
