@@ -26,22 +26,39 @@ pipeline {
                 }
             }
         }
-            stage('Build image') {
-                steps {
-                    script {
-                        echo "Building DOCKER image..."
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh "docker build -t objectobjectlady/jenkins-java-example:${IMAGE_NAME} ."
-                            sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh "docker push objectobjectlady/jenkins-java-example:${IMAGE_NAME}"
-                        }
+        stage('Build image') {
+            steps {
+                script {
+                    echo "Building DOCKER image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "docker build -t objectobjectlady/jenkins-java-example:${IMAGE_NAME} ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh "docker push objectobjectlady/jenkins-java-example:${IMAGE_NAME}"
                     }
                 }
             }
-        stage('deploy') {
+        }
+        stage('Deploy') {
             steps {
                 script {
                     echo "Deploying image App..."
+                }
+            }
+        }
+        stage('Commit Version Update'){
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "jenkins"'
+                        sh 'git status'
+                        sh 'git branch'
+                        sh 'git config --list'
+                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/mmazzet/jenkins-java-example.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci:version increment"'
+                        sh 'git push origin HEAD:test-jenkins-script'
+                    }
                 }
             }
         }
