@@ -6,7 +6,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>version-display-app</artifactId>
-    <version>1.0.0-NEW-SNAPSHOT</version>
+    <version>1.0.16</version>
 
     <properties>
         <java.version>1.8</java.version>
