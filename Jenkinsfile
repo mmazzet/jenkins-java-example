@@ -13,17 +13,14 @@ pipeline {
     tools {
         maven 'maven-3.6'
     }
+    environment{
+        IMAGE_NAME = 'objectobjectlady/jenkins-java-example:jje-3.9'
+    }
     stages {
-        stage ("INIT") {
-            steps {
-                script {
-                    gv = load "script.groovy"
-                }
-            }
-        }
         stage('BUILD JAR') {
             steps {
                 script {
+                echo 'building application jar'
                     buildJar()
                 }
             }
@@ -31,16 +28,22 @@ pipeline {
         stage('BUILD AND PUSH IMAGE') {
             steps {
                 script {
-                    buildImage 'objectobjectlady/jenkins-java-example:jje-3.9'
+                echo 'building docker image...'
+                    buildImage (env.IMAGE_NAME)
                     dockerLogin()
-                    dockerPush 'objectobjectlady/jenkins-java-example:jje-3.9'
+                    dockerPush (env.IMAGE_NAME)
                 }
             }
         }
         stage('DEPLOY') {
             steps {
                 script {
-                    gv.deployApp()
+                    echo 'deploying docker image to EC2...'
+                    def dockerCmd = "docker run -d -p 8080:8080 ${IMAGE_NAME}"
+                        sshagent(['ec2-server-key']) {
+                            sh "ssh -o StrictHostKeyChecking=no ec2-user@34.247.93.182 ${dockerCmd}"
+                        }
+                    }
                 }
             }
         }
