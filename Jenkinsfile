@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploying docker image to EC2...'
-                    def shellCmd = "bash ./server-cmds.sh"
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
                     def sshOpts = "-o StrictHostKeyChecking=no"
                     def remote  = "ec2-user@34.247.93.182"
 
