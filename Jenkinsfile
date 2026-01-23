@@ -6,15 +6,13 @@ library identifier: 'jenkins-shared-lib@mainline', retriever: modernSCM(
     ]
 )
 
-def gv
-
 pipeline {
     agent any
     tools {
         maven 'maven-3.6'
     }
     environment{
-        IMAGE_NAME = 'objectobjectlady/jenkins-java-example:jje-3.9'
+        IMAGE_NAME = 'objectobjectlady/jenkins-java-example:jje-4.0'
     }
     stages {
         stage('BUILD JAR') {
