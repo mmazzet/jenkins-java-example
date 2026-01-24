@@ -11,10 +11,17 @@ pipeline {
     tools {
         maven 'maven-3.6'
     }
-    environment{
-        IMAGE_NAME = 'objectobjectlady/jenkins-java-example:jje-4.0'
-    }
     stages {
+        stage('INCREMENT VERSION') {
+            steps {
+                script {
+                echo 'incrementing app version'
+                sh "mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit"
+                def matcher = readFile('pom.xml') =~ /<version>(.+)<\/version>/
+                def version = matcher[0][1]
+                env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+            }
+                }
         stage('BUILD JAR') {
             steps {
                 script {
@@ -46,6 +53,21 @@ pipeline {
                             scp ${sshOpts} server-cmds.sh ${remote}:/home/ec2-user
                             scp ${sshOpts} docker-compose.yaml ${remote}:/home/ec2-user
                             ssh ${sshOpts} ${remote} 'bash ./server-cmds.sh ${IMAGE_NAME}'
+                        """
+                    }
+                }
+            }
+        }
+        stage('Commit Version Update'){
+            steps {
+                script {
+                    echo "Testing no loop is triggered..."
+                    withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh """
+                            git remote set-url origin https://${USER}:${PASS}@github.com/mmazzet/jenkins-java-example.git
+                            git add .
+                            git commit -m "ci:version increment"
+                            git push origin HEAD:test-jenkins-shared-lib
                         """
                     }
                 }
