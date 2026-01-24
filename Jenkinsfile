@@ -68,7 +68,7 @@ pipeline {
                             git remote set-url origin https://${USER}:${PASS}@github.com/mmazzet/jenkins-java-example.git
                             git add .
                             git commit -m "ci:version increment"
-                            git push origin HEAD:test-jenkins-shared-lib
+                            git push origin HEAD:jenkins-shared-lib
                         """
                     }
                 }
