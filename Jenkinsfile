@@ -22,7 +22,7 @@ pipeline {
                     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
                 }
             }
-
+        }
         stage('BUILD JAR') {
             steps {
                 script {
