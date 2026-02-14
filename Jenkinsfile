@@ -1,38 +1,31 @@
+#!/usr/bin/env groovy
 
 pipeline {
     agent any
     stages {
-        stage("test") {
-            steps {
-                script {
-                    echo "testing the app"
-                    echo "executing the pipeline for branch $BRANCH_NAME"
-                    echo "Testing multibranch autobuild"
-                }
-            }
-        }
-        stage('build') {
-            when {
-                expression {
-                    BRANCH_NAME == 'mainline'
-                }
-            }
+        stage('build app') {
             steps {
                 script {
                     echo "building the app"
                 }
             }
         }
+        stage('build image') {
+             steps {
+                 script {
+                    echo "building the docker image"
+             }
+        }
+     }
         stage('deploy') {
-
-            when {
-                expression {
-                    BRANCH_NAME == 'mainline'
-                }
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
             }
             steps {
                 script {
-                    echo "deploying the app"
+                    echo "deploying the docker image"
+                    sh 'kubectl create deployment nginx-deployment --image=nginx'
                 }
             }
         }
