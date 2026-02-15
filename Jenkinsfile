@@ -70,7 +70,7 @@ pipeline {
                         sh "git remote set-url origin https://${USER}:${PASS}@github.com/mmazzet/jenkins-java-example.git"
                         sh 'git add .'
                         sh 'git commit -m "ci:version increment"'
-                        sh 'git push origin HEAD:final_ci-cd_pipeline'
+                        sh 'git push origin HEAD:final_ci-cd_pipeline_using_ecr'
                     }
                 }
             }
