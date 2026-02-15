@@ -3,6 +3,6 @@ FROM eclipse-temurin:8-jre-alpine
 EXPOSE 8080
 
 WORKDIR /usr/app
-COPY ./target/version-display-app-*.jar /usr/app/
+COPY ./target/jenkins-java-example-*.jar /usr/app/
 
-CMD java -jar version-display-app-*.jar
+CMD java -jar jenkins-java-example-*.jar
