@@ -1,9 +1,15 @@
+terraform {
+    required_version = ">= 0.12"
+    backend "s3" {
+        bucket = "myapp-bucket-mille"
+        key    = "myapp/state.tfstate"
+        region = "eu-west-1"
+  }
+}
+
 provider "aws" {
     region = "eu-west-1"
 }
-
-
-
 
 resource "aws_vpc" "myapp-vpc" {
     cidr_block = var.vpc_cidr_block
