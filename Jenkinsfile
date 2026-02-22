@@ -15,6 +15,8 @@ pipeline {
     environment {
         IMAGE_NAME = 'objectobjectlady/jenkins-java-example:1.0.19'
     }
+
+    stages {
         stage('build app') {
             steps {
                 script {
